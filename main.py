@@ -1,5 +1,5 @@
 from BD.conexion import DAO
-import funciones as f
+import BD.funciones as f
 
 def menu():
     print("----- MENÚ -----")
