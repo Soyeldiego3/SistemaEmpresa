@@ -14,10 +14,12 @@ def menu():
     bd = DAO()
     if opcion == "1":
         f.listarTabla(bd.leer())
+        input("Presiona cualquier tecla para continuar...")
         menu()
     elif opcion == "2":
         datos = f.obtenerdatosbd(bd.pedirDatos())
         bd.crear(datos)
+        input("Presiona cualquier tecla para continuar...")
         menu()
     elif opcion == "3":
         tabla = input("Ingrese el nombre de la tabla: ")

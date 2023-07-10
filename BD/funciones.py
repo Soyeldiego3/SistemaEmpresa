@@ -9,8 +9,15 @@ def listarTabla(leertabla):
     print('\n Tabla: {0} \n'.format(nomtabla))
 
     lista = "" #se puede cambiar a una lista deverdad #esta como string por cosas de la vida
+
+    if nomtabla == "trabajador":
+        foraneas = 3
+        cantcolumn = (len(desc)) - foraneas
+    else:
+        cantcolumn = (len(desc))
+
     for row in tabla:
-        for num in range(len(desc)):
+        for num in range(cantcolumn):
             lista += (str(desc[num][0]) + " = " + str(row[num]) + " | ") #crea la estructura de la tabla con los datos de esta
         lista += "\n"
 

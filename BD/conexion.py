@@ -8,12 +8,27 @@ class DAO():
         except Error as er:
             print("Error al Conectar: {0}".format(er))
     
-    def leer(self):
+    def leer(self,tablasdisponibles):
         if self.con.is_connected():
             try:
-                nomtabla = input ("Nombre Tabla: ")
+                cursor = self.con.cursor() #crea el cursor
 
-                cursor = self.con.cursor()
+                tables = "SHOW TABLES FROM yuri" #muestra todas las tablas de la BD
+                cursor.execute(tables)
+                nomtablas = cursor.fetchall() #muestra los nombres de las tablas de la BD
+                ntablas = ""  #nombre de las tablas para imprimir
+                tablasdisponibles = []
+                for tablas in range(len(nomtablas)):
+                    ntablas += ((nomtablas[tablas][0]) + ", ")
+                    tablasdisponibles.append(nomtablas[tablas][0])
+                print("tablas Disponibles: ", ntablas) #muestra las tablas disponibles
+
+                existe = False
+                while existe != True: #verifica que la tabla exista
+                    nomtabla = input ("Nombre Tabla: ")
+                    if nomtabla in tablasdisponibles: 
+                        existe = True
+
                 seleccionar = "select * from {0}".format(nomtabla)
                 desccolumna = "desc {0}".format(nomtabla)
 
@@ -48,9 +63,8 @@ class DAO():
     def pedirDatos(self): #para crear
         if self.con.is_connected():
             try:
-
-                nomtabla = input ("Nombre Tabla: ")
                 cursor = self.con.cursor()
+                nomtabla = input ("Nombre Tabla: ")
 
                 desc = "desc {0}".format(nomtabla)
                 cursor.execute(desc)
