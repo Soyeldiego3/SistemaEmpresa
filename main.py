@@ -1,4 +1,5 @@
-from CRUD import crear, leer, eliminar, actualizar
+from BD.conexion import DAO
+import funciones as f
 
 def menu():
     print("----- MENÚ -----")
@@ -10,21 +11,21 @@ def menu():
 
     opcion = input("Selecciona una opción: ")
 
+    bd = DAO()
     if opcion == "1":
-        tabla = input("Ingrese el nombre de la tabla: ")
-        leer(tabla)
+        f.listarTabla(bd.leer())
         menu()
     elif opcion == "2":
-        tabla = input("Ingrese el nombre de la tabla: ")
-        crear(tabla)
+        datos = f.obtenerdatosbd(bd.pedirDatos())
+        bd.crear(datos)
         menu()
     elif opcion == "3":
         tabla = input("Ingrese el nombre de la tabla: ")
-        eliminar(tabla)
+        #eliminar(tabla)
         menu()
     elif opcion == "4":
         tabla = input("Ingrese el nombre de la tabla: ")
-        actualizar(tabla)
+        #actualizar(tabla)
         menu()
     elif opcion == "5":
         print("Saliendo del programa...")

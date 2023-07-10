@@ -39,11 +39,8 @@ def crear():
     tabla = input("nombre tabla = ")
 
     queryy = "desc {0}".format(tabla) #sentencia sql
-    contar = "select count(*) from {0}".format(tabla) #sentencia sql #cuenta la cantidad de datos en la tabla
     cursor.execute(queryy)
     nomcol = cursor.fetchall()
-    cursor.execute(contar)
-    rows = cursor.fetchall() #se me olvido para que estaba esto A A A A 
 
     #crear la nueva id
     obtener = "select {0} from {1}".format(nomcol[0][0],tabla)
