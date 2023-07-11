@@ -8,27 +8,16 @@ class DAO():
         except Error as er:
             print("Error al Conectar: {0}".format(er))
     
-    def leer(self,tablasdisponibles):
+    def leer(self,nomtabla):
         if self.con.is_connected():
             try:
                 cursor = self.con.cursor() #crea el cursor
 
-                tables = "SHOW TABLES FROM yuri" #muestra todas las tablas de la BD
-                cursor.execute(tables)
-                nomtablas = cursor.fetchall() #muestra los nombres de las tablas de la BD
-                ntablas = ""  #nombre de las tablas para imprimir
-                tablasdisponibles = []
-                for tablas in range(len(nomtablas)):
-                    ntablas += ((nomtablas[tablas][0]) + ", ")
-                    tablasdisponibles.append(nomtablas[tablas][0])
-                print("tablas Disponibles: ", ntablas) #muestra las tablas disponibles
-
-                existe = False
-                while existe != True: #verifica que la tabla exista
-                    nomtabla = input ("Nombre Tabla: ")
-                    if nomtabla in tablasdisponibles: 
-                        existe = True
-
+                #if nomtabla == "trabajador":
+                    #seleccionar = "select * from trabajador INNER JOIN cuenta ON trabajador.Usuario_ID=cuenta.Usuario_ID;"
+                    #desccolumna = "desc trabajador"
+                    #print("a")
+                #else:
                 seleccionar = "select * from {0}".format(nomtabla)
                 desccolumna = "desc {0}".format(nomtabla)
 
@@ -47,15 +36,33 @@ class DAO():
             try:
                 cursor = self.con.cursor()
 
-                query = "insert into {0} values {1}".format(datos[1],(tuple(datos[0]))) #inserta la lista como tupla dentro del sql
-                print ("\n" + query + "\n") #muestra como queda la query final para el sql
+                newdatos = datos[0]
+                tablaname = datos[1]
 
-                try:
-                    cursor.execute(query) #ejecuta el sql
-                    self.con.commit() #guarda los cambios
-                    print("Datos Guardados!")
-                except:
-                    print("Error al Guardar") 
+                for q in range(len(tablaname)):
+                    titulo = tablaname[q]
+                    if titulo == "trabajador":
+                        dt = newdatos[q]
+                        #print(dt, " Conexion\n")
+                        faltan = []
+                        for f in range(3):
+                            id = newdatos[q][0]
+                            faltan.append(id)
+                        dt.extend(faltan)
+                        #print(dt, "\n")
+                        query = "insert into {0} values {1}".format(titulo,(tuple(dt)))
+                        print ("\n TRABAJADOR: " + query + "\n")
+                    else:
+                        query = "insert into {0} values {1}".format(titulo,(tuple(newdatos[q])))
+                        #print(tablaname[q] , "\n")
+                        #print ("\n" + query + "\n") #descomentar para mostrar como queda la query final para el sql
+
+                    try:
+                        cursor.execute(query) #ejecuta el sql
+                        self.con.commit() #guarda los cambios
+                        print("Datos Guardados!")
+                    except:
+                        print("Error al Guardar") 
 
             except Error as er:
                 print("Error al Conectar: {0}".format(er))
@@ -64,25 +71,66 @@ class DAO():
         if self.con.is_connected():
             try:
                 cursor = self.con.cursor()
-                nomtabla = input ("Nombre Tabla: ")
+                nomtabla = ["trabajador", "t_cargas_familiares","t_contactos_emergencia", "departamento", "cuenta"]
+                descripciones = []
 
-                desc = "desc {0}".format(nomtabla)
-                cursor.execute(desc)
-                nomcol = cursor.fetchall()
-
+                for i in range(len(nomtabla)):
+                    descquery = "desc {0}".format(nomtabla[i]) 
+                    cursor.execute(descquery)
+                    descripcion = cursor.fetchall()
+                    descripciones.append(descripcion)
                 try:
                     #crear la nueva id
-                    obtener = "select {0} from {1}".format(nomcol[0][0],nomtabla)
+                    obtener = "select {0} from {1}".format("T_ID","trabajador")
                     cursor.execute(obtener)
                     lastid = cursor.fetchall()
-                    newid = (int(lastid[-1][0])) #obtiene la ultima id de la tabla
-
-                    datos = [] #lista con los datos ingresados
-                    datos.append(newid+1) #enumera la id y la agrega a la lista
+                    if lastid == "" or lastid == []:
+                        newid = 0
+                    else:
+                        newid = (int(lastid[-1])) #obtiene la ultima id de la tabla
                 except:
                     print("error")
                 
-                return (nomcol, datos, nomtabla)
-
+                return (nomtabla, descripciones, newid)
             except Error as er:
-                print("Error al Conectar: {0}".format(er))
+                print("Error al Conectar: {}".format(er))
+    
+    def tablas(self):
+        if self.con.is_connected():
+            cursor = self.con.cursor()
+                    
+            tablesquery = "SHOW TABLES FROM yuri" #muestra todas las tablas de la BD
+            cursor.execute(tablesquery)
+            nomtablas = cursor.fetchall() #tablas de la BD
+            ntablas = ""  #nombre de las tablas(string)
+            tablasdisponibles = [] #nombre de las tablas (lista)
+
+            for tablas in range(len(nomtablas)):
+                ntablas += ((nomtablas[tablas][0]) + ", ") #agrega el nombre de la tabla a un string
+                tablasdisponibles.append(nomtablas[tablas][0]) #agrega el nombre de la tabla a una lista
+            return(tablasdisponibles,ntablas)
+
+
+    def eliminar(self,datos):
+        if self.con.is_connected():
+            cursor = self.con.cursor()
+
+            nomtabla = datos[0]
+            nomcol = datos[1]
+            id = datos[2]
+
+            condicion = "{0}={1}".format(str(nomcol),int(id))
+
+            eliminarquery = "DELETE FROM {0} WHERE {1};".format(nomtabla,condicion)
+            try:
+                print(eliminarquery, "\n")
+                cursor.execute(eliminarquery)
+                self.con.commit() #Aplicar cambios
+                print("Datos Eliminados!")
+            except:
+                print("Error! verifique que la id ingresada sea valida")
+    
+    def actualizar(self):
+        print("ACTUALIZADOO WAOWAOWAO!")
+
+

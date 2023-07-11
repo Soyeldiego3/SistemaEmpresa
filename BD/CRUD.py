@@ -107,7 +107,7 @@ def actualizar():
     #ToDo: mostrar campos disponibles, preguntar cuantos valores se van a actaulizar y poder actulizarlos de una tipo *Especificar las condiciones de la actualización
 
 
-crear()
+#crear()
 #leer("cuenta")
 #actualizar()
 #eliminar()
