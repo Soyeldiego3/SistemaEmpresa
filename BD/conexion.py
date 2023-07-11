@@ -51,18 +51,18 @@ class DAO():
                         dt.extend(faltan)
                         #print(dt, "\n")
                         query = "insert into {0} values {1}".format(titulo,(tuple(dt)))
-                        print ("\n TRABAJADOR: " + query + "\n")
+                        print ("\n TRABAJADOR: ", query, "\n")
                     else:
                         query = "insert into {0} values {1}".format(titulo,(tuple(newdatos[q])))
                         #print(tablaname[q] , "\n")
-                        #print ("\n" + query + "\n") #descomentar para mostrar como queda la query final para el sql
+                        #print (tablaname[q], query, "\n") #descomentar para mostrar como queda la query final para el sql
 
                     try:
                         cursor.execute(query) #ejecuta el sql
                         self.con.commit() #guarda los cambios
                         print("Datos Guardados!")
                     except:
-                        print("Error al Guardar") 
+                        print("Error al Guardar. {0}".format(er)) 
 
             except Error as er:
                 print("Error al Conectar: {0}".format(er))

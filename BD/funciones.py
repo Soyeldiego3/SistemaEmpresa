@@ -49,7 +49,7 @@ def obtenerdatosbd(pedirDatos):
         if tabla == "trabajador":
             for d in range(len(nomcol)-4): #-4 para descontar id y las fk
                 d += 1 #para saltar la id
-                dato = input(str(nomcol[d][0])+(" = "))
+                dato = input(((str(nomcol[d][0]))+(" = ")))
                 print("\n")
                 datostrabajador.append(dato)
         elif tabla == "t_cargas_familiares":
