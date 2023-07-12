@@ -2,12 +2,12 @@ from BD.conexion import DAO
 import BD.funciones as f
 
 def menu():
-    print("----- MENÚ -----")
+    print("\n----- MENÚ -----")
     print("1. Listar Trabajadores")
     print("2. Crear Trabajador")
     print("3. Eliminar registro")
     print("4. Actualizar registro")
-    print("5. Salir")
+    print("5. Salir \n")
 
     opcion = input("Selecciona una opción: ")
 
@@ -21,7 +21,6 @@ def menu():
         menu()
     elif opcion == "2":
         #crear
-        #tabla = f.obtenertabla(bd.tablas())
         datos = f.obtenerdatosbd(bd.pedirDatos())
         bd.crear(datos)
         input("Presiona Enter para continuar...")
@@ -34,9 +33,8 @@ def menu():
         input("Presiona Enter para continuar...")
         menu()
     elif opcion == "4":
-        tabla = input("Ingrese el nombre de la tabla: ")
-        #actualizar(tabla)
-        menu()
+        bd.actualizar() #No Disponible
+        menu() 
     elif opcion == "5":
         print("Saliendo del programa...")
     else:

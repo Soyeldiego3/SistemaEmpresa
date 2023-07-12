@@ -5,17 +5,15 @@ def listarTabla(leertabla):
     desc = leertabla[1]
     nomtabla = leertabla[2]
 
-    print(desc, "\n")
     # mostrar datos
     print('\n Tabla: {0} \n'.format(nomtabla))
 
     lista = "" #se puede cambiar a una lista deverdad #esta como string por cosas de la vida
 
-    #if nomtabla == "trabajador":
-    #    foraneas = 3
-    #    cantcolumn = (len(desc)) - foraneas
-    #else:
-    cantcolumn = (len(desc))
+    if nomtabla == "trabajador":
+        cantcolumn = (len(desc)-3) #se le resta las llaver foraneas
+    else:
+        cantcolumn = (len(desc))
 
     for row in tabla:
         for num in range(cantcolumn):
@@ -24,69 +22,103 @@ def listarTabla(leertabla):
 
     return (lista)
 
+import bcrypt
+def encriptar(clave):
+    bytes = clave.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hash = bcrypt.hashpw(bytes,salt)
+    clave = str(hash)
+    return clave
+
 def obtenerdatosbd(pedirDatos):
 
     nomtabla = pedirDatos[0]
     descripciones = pedirDatos[1] 
     newid = pedirDatos[2]
 
+    #lista de Datos de todas las tablas con la ID Pregenerada
     datostrabajador = [newid]
     datoscargas = [newid]
     datoscontactos = [newid]
     datosdepartamento = [newid]
     datoscuenta = [newid]  
 
-    #for t in range(len(nomtabla)): #ARREGLAR ESTO AQUI AQUI AQUI 👇👇
-        #tabla = nomtabla[t] #trabajador = 0
-        #print(tabla, " AQUI\n")
     for a in range(len(descripciones)):
         tabla = nomtabla[a]
-        #print(tabla, " AQUI\n")
         nomcol = descripciones[a] #trabajador
-        #print(nomcol, "\n")
-        #print(len(nomcol), "\n")
-        print("\n", tabla.upper(), ": \n")
+
+        print("\n", tabla.upper(), ": \n") #imprime el nombre de la tabla en la que se esta
         if tabla == "trabajador":
-            for d in range(len(nomcol)-4): #-4 para descontar id y las fk
-                d += 1 #para saltar la id
-                dato = input(((str(nomcol[d][0]))+(" = ")))
-                print("\n")
+            trabajadorli = ["Rut","Nombre", "Sexo", "Direccion", "Telefono", "FechaDeIngreso"]
+            for d in range(len(nomcol)-5): #para no mostrar id y las fk se quitan 5
+                if trabajadorli[d] == "Rut" or trabajadorli[d] == "Telefono":
+                    numeric = False
+                    while numeric != True:
+                        dato = input((trabajadorli[d]) + (" = "))
+                        if dato.isnumeric() == True:
+                            numeric = True
+                        else:
+                            print("> Debe de ingresar solo Numeros <")
+                else:
+                    dato = input((trabajadorli[d]) + (" = "))
                 datostrabajador.append(dato)
+
         elif tabla == "t_cargas_familiares":
-            for d in range(len(nomcol)-1):
-                d += 1
-                dato = input((str(nomcol[d][0]))+(" = "))
-                #print(tabla, "\n")
-                print("\n")
+            cargasli = ["Rut","Nombre","Edad","Parentesco"]
+            for d in range(len(nomcol)-1): #para no mostrar la id se le resta 1
+                if cargasli[d] == "Rut" or cargasli[d] == "Edad":
+                    numeric = False
+                    while numeric != True:
+                        dato = input((cargasli[d])+(" = "))
+                        if dato.isnumeric() == True:
+                            numeric = True
+                        else:
+                            print("> Debe de ingresar solo Numeros <")
+                else:
+                    dato = input((cargasli[d])+(" = "))
                 datoscargas.append(dato)
+
         elif tabla == "t_contactos_emergencia":
+            contactosli = ["Rut","Nombre","Telefono","Relación"]
             for d in range(len(nomcol)-1):
-                d += 1
-                dato = input(str(nomcol[d][0])+(" = "))
-                #print(tabla, "\n")
-                print("\n")
+                if contactosli[d] == "Rut" or contactosli[d] == "Telefono":
+                    numeric = False
+                    while numeric != True:
+                        dato = input((contactosli[d])+(" = "))
+                        if dato.isnumeric() == True:
+                            numeric = True
+                        else:
+                            print("> Debe de ingresar solo Numeros <")
+                else:           
+                    dato = input((contactosli[d])+(" = "))
                 datoscontactos.append(dato)
+
         elif tabla == "departamento":
+            depali = ["Codigo", "Nombre Departamento", "Cargo"]
             for d in range(len(nomcol)-1):
-                d += 1
-                dato = input(str(nomcol[d][0])+(" = "))
-                #print(tabla, "\n")
-                print("\n")
+                if depali[d] == "Codigo":
+                    numeric = False
+                    while numeric != True:
+                        dato = input((depali[d])+(" = "))
+                        if dato.isnumeric() == True:
+                            numeric = True
+                        else:
+                            print("> Debe de ingresar solo Numeros <")
+                else:
+                    dato = input((depali[d])+(" = "))
                 datosdepartamento.append(dato)
+
         elif tabla == "cuenta":
+            cuentali = ["Email", "Contraseña"]
             for d in range(len(nomcol)-1):
-                d += 1
-                dato = input(str(nomcol[d][0])+(" = "))
-                #print(tabla, "\n")
-                print("\n")
+                dato = input((cuentali[d])+(" = "))
+                if cuentali[d] == "Contraseña":
+                    dato = encriptar(dato)
                 datoscuenta.append(dato)
         else:
-            print(tabla, "error\n")
-            #print("\n\m ¡¡¡ALGO SALIO MAL!!! \n\n")
+            print("\n", tabla, "error: \n")
     
     datos = [datostrabajador,datoscargas,datoscontactos,datosdepartamento,datoscuenta]
-    #print(datos, "\n")
-    #print(datos[0], "\n")
     return (datos, nomtabla)
 
 def obtenertabla(tablas):

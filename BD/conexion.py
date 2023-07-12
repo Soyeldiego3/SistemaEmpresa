@@ -13,13 +13,8 @@ class DAO():
             try:
                 cursor = self.con.cursor() #crea el cursor
 
-                #if nomtabla == "trabajador":
-                    #seleccionar = "select * from trabajador INNER JOIN cuenta ON trabajador.Usuario_ID=cuenta.Usuario_ID;"
-                    #desccolumna = "desc trabajador"
-                    #print("a")
-                #else:
                 seleccionar = "select * from {0}".format(nomtabla)
-                desccolumna = "desc {0}".format(nomtabla)
+                desccolumna = "desc {0}".format(nomtabla) #describe la tabla
 
                 cursor.execute(seleccionar)
                 listatabla = cursor.fetchall()
@@ -35,34 +30,47 @@ class DAO():
         if self.con.is_connected():
             try:
                 cursor = self.con.cursor()
+                errores = []
 
-                newdatos = datos[0]
-                tablaname = datos[1]
+                newdatos = datos[0] #datos de cada tabla dentro de una lista
+                tablaname = datos[1] #nombre de todas las tablas 
 
                 for q in range(len(tablaname)):
                     titulo = tablaname[q]
                     if titulo == "trabajador":
                         dt = newdatos[q]
-                        #print(dt, " Conexion\n")
                         faltan = []
-                        for f in range(3):
-                            id = newdatos[q][0]
+                        id = newdatos[q][0] #obtiene la id del trabajador
+                        for f in range(4): #se le asigna la id a las FK
                             faltan.append(id)
                         dt.extend(faltan)
-                        #print(dt, "\n")
+                        errorfix = "SET FOREIGN_KEY_CHECKS=0;"
                         query = "insert into {0} values {1}".format(titulo,(tuple(dt)))
-                        print ("\n TRABAJADOR: ", query, "\n")
+                        print ("\nTRABAJADOR query: ", query, "\n")
+                        try:
+                            cursor.execute(errorfix)
+                            cursor.execute(query) #ejecuta el sql
+                            print("Datos Verificados!")
+                        except Error as er:
+                            error = ("Error al Guardar. {0}".format(er))
+                            errores.append(error)
+
                     else:
                         query = "insert into {0} values {1}".format(titulo,(tuple(newdatos[q])))
-                        #print(tablaname[q] , "\n")
-                        #print (tablaname[q], query, "\n") #descomentar para mostrar como queda la query final para el sql
+                        #descomentar el print para mostrar como queda la query final
+                        #print (tablaname[q],"query : ", query, "\n")
 
-                    try:
-                        cursor.execute(query) #ejecuta el sql
-                        self.con.commit() #guarda los cambios
-                        print("Datos Guardados!")
-                    except:
-                        print("Error al Guardar. {0}".format(er)) 
+                        try:
+                            cursor.execute(query) #ejecuta el sql
+                            print("Datos Verificados!")
+                        except Error as er:
+                            error = ("Error al Guardar. {0}".format(er))
+                            errores.append(error)
+                if errores == []:
+                    self.con.commit() #guarda los cambios
+                    print("Datos Guardados!")
+                else:
+                    print("Algo Salio Mal! \n No Se Guardaron Los Datos! \n", errores)
 
             except Error as er:
                 print("Error al Conectar: {0}".format(er))
@@ -87,11 +95,14 @@ class DAO():
                     if lastid == "" or lastid == []:
                         newid = 0
                     else:
-                        newid = (int(lastid[-1])) #obtiene la ultima id de la tabla
-                except:
-                    print("error")
+                        id = ((lastid[-1][0])) #obtiene la ultima id de la tabla
+                        newid = (id + 1)
+                        print("nueva id: ",newid, "\n")
+
+                    return (nomtabla, descripciones, newid)
                 
-                return (nomtabla, descripciones, newid)
+                except Error as er:
+                    print("error: {}".format(er))
             except Error as er:
                 print("Error al Conectar: {}".format(er))
     
@@ -127,10 +138,14 @@ class DAO():
                 cursor.execute(eliminarquery)
                 self.con.commit() #Aplicar cambios
                 print("Datos Eliminados!")
-            except:
-                print("Error! verifique que la id ingresada sea valida")
+            except Error as er:
+                print("¡Error! verifique que la id ingresada sea valida. \n ERROR: {}".format(er))
     
     def actualizar(self):
-        print("ACTUALIZADOO WAOWAOWAO!")
+        print("No Disponible!")
 
+    def salir(self):
+        cursor = self.con.cursor()
+        cursor.close()
+        self.con.close()
 
