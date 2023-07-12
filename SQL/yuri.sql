@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-07-2023 a las 05:57:43
+-- Tiempo de generación: 12-07-2023 a las 06:49:01
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -42,8 +42,8 @@ CREATE TABLE `cuenta` (
 CREATE TABLE `departamento` (
   `D_ID` int(11) NOT NULL,
   `D_codigo` int(11) NOT NULL,
-  `Nom_departamento` varchar(20) NOT NULL,
-  `Cargo` varchar(20) NOT NULL
+  `Nom_departamento` varchar(25) NOT NULL,
+  `Cargo` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -57,8 +57,8 @@ CREATE TABLE `trabajador` (
   `T_RUT` varchar(11) NOT NULL,
   `T_Nombre` varchar(20) NOT NULL,
   `T_Sexo` varchar(10) NOT NULL,
-  `T_Direccion` varchar(20) NOT NULL,
-  `T_Telefono` varchar(11) NOT NULL,
+  `T_Direccion` varchar(15) NOT NULL,
+  `T_Telefono` varchar(15) NOT NULL,
   `T_FechaIngreso` varchar(12) NOT NULL,
   `Usuario_ID` int(11) NOT NULL,
   `T_F_ID` int(11) NOT NULL,
@@ -115,7 +115,7 @@ ALTER TABLE `departamento`
 --
 ALTER TABLE `trabajador`
   ADD PRIMARY KEY (`T_ID`),
-  ADD KEY `Usuario_ID` (`Usuario_ID`,`T_F_ID`,`T_E_ID`),
+  ADD KEY `Usuario_ID` (`Usuario_ID`),
   ADD KEY `T_F_ID` (`T_F_ID`),
   ADD KEY `T_E_ID` (`T_E_ID`),
   ADD KEY `D_ID` (`D_ID`);
@@ -140,10 +140,10 @@ ALTER TABLE `t_contactos_emergencia`
 -- Filtros para la tabla `trabajador`
 --
 ALTER TABLE `trabajador`
-  ADD CONSTRAINT `trabajador_ibfk_1` FOREIGN KEY (`Usuario_ID`) REFERENCES `cuenta` (`Usuario_ID`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `trabajador_ibfk_1` FOREIGN KEY (`Usuario_ID`) REFERENCES `cuenta` (`Usuario_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `trabajador_ibfk_2` FOREIGN KEY (`T_F_ID`) REFERENCES `t_cargas_familiares` (`T_F_ID`) ON UPDATE CASCADE,
   ADD CONSTRAINT `trabajador_ibfk_3` FOREIGN KEY (`T_E_ID`) REFERENCES `t_contactos_emergencia` (`T_E_ID`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `trabajador_ibfk_4` FOREIGN KEY (`D_ID`) REFERENCES `departamento` (`D_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `trabajador_ibfk_4` FOREIGN KEY (`D_ID`) REFERENCES `departamento` (`D_ID`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
