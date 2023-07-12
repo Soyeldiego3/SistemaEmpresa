@@ -122,10 +122,36 @@ def obtenerdatosbd(pedirDatos):
     return (datos, nomtabla)
 
 def obtenertabla(tablas):
-    print("tablas Disponibles: ", tablas[1]) #tablas[1] = string con el nombre de las tablas
+    print("\nTablas Disponibles: 1-Cuenta, 2-Departamento, 3-Cargas Familiares, 4-Contactos de Emergencia, 5-Trabajador") #tablas[1] = string con el nombre de las tablas
+    print("Ingrese el numero de la tabla desde el: 1 al {} \n".format(len(tablas[0])))
     existe = False
+    numeric = False
+
     while existe != True: #verifica que la tabla exista
-        nomtabla = input ("Nombre Tabla: ")
+        while numeric != True:
+            numtabla = input ("Tabla: ")
+            if numtabla.isnumeric() == True:
+                numtabla = int(numtabla)
+                if numtabla == 1:
+                    nomtabla = "cuenta"
+                    numeric = True
+                elif numtabla == 2:
+                    nomtabla = "departamento"
+                    numeric = True
+                elif numtabla == 3:
+                    nomtabla = "t_cargas_familiares"
+                    numeric = True
+                elif numtabla == 4:
+                    nomtabla = "t_contactos_emergencia"
+                    numeric = True
+                elif numtabla == 5:
+                    nomtabla = "trabajador"
+                    numeric = True
+                else:
+                    numtabla = "No"
+            else:
+                print("Debes de ingresar un Numero Valido! \n")
+
         if nomtabla in tablas[0]:  #tablas[0] = lista con los nombres de las tablas
             existe = True
     return (nomtabla)

@@ -142,7 +142,7 @@ class DAO():
                 print("¡Error! verifique que la id ingresada sea valida. \n ERROR: {}".format(er))
     
     def actualizar(self):
-        print("No Disponible!")
+        print("\n¡No Disponible!")
 
     def salir(self):
         cursor = self.con.cursor()

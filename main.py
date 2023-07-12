@@ -36,9 +36,9 @@ def menu():
         bd.actualizar() #No Disponible
         menu() 
     elif opcion == "5":
-        print("Saliendo del programa...")
+        print("\n Saliendo del programa...")
     else:
-        print("Opción inválida. Por favor, seleccione una opción válida.")
+        print("\nOpción inválida. Por favor, seleccione una opción válida.")
         menu()
 
 # Ejecutar el menú al iniciar el programa
